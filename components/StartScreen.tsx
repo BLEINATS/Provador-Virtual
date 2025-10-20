@@ -101,8 +101,8 @@ const StartScreen: React.FC<StartScreenProps> = ({ onModelFinalized }) => {
           </div>
           <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
             <Compare
-              firstImage="https://storage.googleapis.com/gemini-95-icons/vto-start-blonde-before.jpg"
-              secondImage="https://storage.googleapis.com/gemini-95-icons/vto-start-blonde-after.png"
+              firstImage="https://storage.googleapis.com/builder-next-prod.appspot.com/vto_demo_assets/before_1.jpeg"
+              secondImage="https://storage.googleapis.com/builder-next-prod.appspot.com/vto_demo_assets/after_1.jpeg"
               slideMode="drag"
               className="w-full max-w-sm aspect-[2/3] rounded-2xl bg-gray-200"
             />
@@ -159,7 +159,11 @@ const StartScreen: React.FC<StartScreenProps> = ({ onModelFinalized }) => {
                     Usar Foto Diferente
                   </button>
                   <button 
-                    onClick={() => onModelFinalized(generatedModelUrl)}
+                    onClick={() => {
+                        if (generatedModelUrl) {
+                            onModelFinalized(generatedModelUrl);
+                        }
+                    }}
                     className="w-full sm:w-auto relative inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-gray-900 rounded-md cursor-pointer group hover:bg-gray-700 transition-colors"
                   >
                     Começar a Criar Looks &rarr;

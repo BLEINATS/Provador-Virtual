@@ -74,6 +74,15 @@ export const dressModel = async (
         "**DIRETRIZ INVIOLÁVEL: A MODELO ORIGINAL É SAGRADA**",
         "A modelo na imagem base NÃO PODE ser alterada. O rosto, corpo, cabelo, tom de pele e todas as características físicas devem permanecer 100% IDÊNTICOS. A imagem final deve ser A MESMA PESSOA, apenas com roupas diferentes.",
         "",
+        "**DIRETRIZ CRÍTICA: FIDELIDADE TOTAL ÀS PEÇAS DE ROUPA**",
+        "As peças de roupa fornecidas devem ser replicadas na modelo com 100% de precisão. NÃO FAÇA NENHUMA ALTERAÇÃO na aparência das roupas.",
+        "Isto inclui, mas não se limita a:",
+        "- **CORES:** Mantenha as cores exatas. Não altere a tonalidade, saturação ou brilho.",
+        "- **PADRÕES E ESTAMPAS:** Reproduza todas as linhas, formas e padrões exatamente como na imagem original.",
+        "- **DETALHES:** Preserve todos os detalhes: botões, zíperes, laços, cintos, costuras, logotipos, etc.",
+        "- **TEXTURA E CAIMENTO:** O material e a forma como a roupa se dobra devem ser consistentes com o item original, ajustado de forma realista ao corpo da modelo.",
+        "A roupa na imagem final deve ser instantaneamente reconhecível como o item exato fornecido. NÃO INVENTE ou modifique NENHUM aspecto da roupa.",
+        "",
         "**LISTA DE PROIBIÇÕES ABSOLUTAS (Qualquer violação é uma falha):**",
         "1. **NÃO ADICIONE TATUAGENS:** É estritamente proibido adicionar tatuagens ou qualquer marcação na pele da modelo que não existia na foto original.",
         "2. **NÃO ADICIONE ACESSÓRIOS:** Não adicione NENHUM item extra que não foi enviado como uma imagem de produto. Isso inclui, mas não se limita a: joias (colares, brincos, pulseiras, anéis), bolsas, chapéus, óculos, cintos, etc.",
@@ -83,7 +92,7 @@ export const dressModel = async (
         "**Processo Passo a Passo:**",
         "1. **Análise da Modelo Base:** Identifique a modelo e suas características imutáveis.",
         "2. **Remoção da Roupa Original:** Remova digitalmente TODAS as roupas que a modelo está vestindo.",
-        "3. **Aplicação da Nova Roupa:** Vista a modelo com as novas peças fornecidas, ajustando de forma realista.",
+        "3. **Aplicação da Nova Roupa:** Vista a modelo com as novas peças fornecidas, seguindo estritamente as diretrizes de fidelidade, e ajuste de forma realista.",
     ];
     
     if (poseInstruction) {
