@@ -10,6 +10,7 @@ import { Compare } from './ui/compare';
 import { generateModelImage } from '../services/geminiService';
 import Spinner from './Spinner';
 import { getFriendlyErrorMessage } from '../lib/utils';
+import Footer from './Footer';
 
 interface StartScreenProps {
   onModelFinalized: (modelUrl: string) => void;
@@ -66,127 +67,134 @@ const StartScreen: React.FC<StartScreenProps> = ({ onModelFinalized }) => {
     exit: { opacity: 0, x: 20 },
   };
 
-  return (
-    <AnimatePresence mode="wait">
-      {!userImageUrl ? (
-        <motion.div
-          key="uploader"
-          className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12"
-          variants={screenVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-        >
-          <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <div className="max-w-lg">
-              <h1 className="text-5xl md:text-6xl font-serif font-bold text-gray-900 leading-tight">
-                Seja a Modelo da Sua Própria Marca.
-              </h1>
-              <p className="mt-4 text-lg text-gray-600">
-                Poupe horas de ensaios fotográficos. Envie uma foto sua para se tornar a modelo e adicione as roupas da sua loja para criar looks incríveis para suas redes sociais e e-commerce.
-              </p>
-              <hr className="my-8 border-gray-200" />
-              <div className="flex flex-col items-center lg:items-start w-full gap-3">
-                <label htmlFor="image-upload-start" className="w-full relative flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-gray-900 rounded-md cursor-pointer group hover:bg-gray-700 transition-colors">
-                  <UploadCloudIcon className="w-5 h-5 mr-3" />
-                  Criar Minha Modelo
-                </label>
-                <input id="image-upload-start" type="file" className="hidden" accept="image/png, image/jpeg, image/webp, image/avif, image/heic, image/heif" onChange={handleFileChange} />
-                <p className="text-gray-500 text-sm">Selecione uma foto nítida e de corpo inteiro. Fotos apenas do rosto também funcionam, mas corpo inteiro é preferível para melhores resultados.</p>
-                <p className="text-gray-500 text-xs mt-1">Ao enviar, você concorda em não criar conteúdo prejudicial, explícito ou ilegal. Este serviço é apenas para uso criativo e responsável.</p>
-                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-              </div>
-            </div>
-          </div>
-          <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
-            <Compare
-              firstImage="https://storage.googleapis.com/builder-next-prod.appspot.com/vto_demo_assets/before_1.jpeg"
-              secondImage="https://storage.googleapis.com/builder-next-prod.appspot.com/vto_demo_assets/after_1.jpeg"
-              slideMode="drag"
-              className="w-full max-w-sm aspect-[2/3] rounded-2xl bg-gray-200"
-            />
-          </div>
-        </motion.div>
-      ) : (
-        <motion.div
-          key="compare"
-          className="w-full max-w-6xl mx-auto h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12"
-          variants={screenVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{ duration: 0.4, ease: "easeInOut" }}
-        >
-          <div className="md:w-1/2 flex-shrink-0 flex flex-col items-center md:items-start">
-            <div className="text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 leading-tight">
-                Sua Modelo Digital
-              </h1>
-              <p className="mt-2 text-md text-gray-600">
-                Arraste o controle deslizante para ver sua transformação.
-              </p>
-            </div>
-            
-            {isGenerating && (
-              <div className="flex items-center gap-3 text-lg text-gray-700 font-serif mt-6">
-                <Spinner />
-                <span>Gerando sua modelo...</span>
-              </div>
-            )}
-
-            {error && 
-              <div className="text-center md:text-left text-red-600 max-w-md mt-6">
-                <p className="font-semibold">A Geração Falhou</p>
-                <p className="text-sm mb-4">{error}</p>
-                <button onClick={reset} className="text-sm font-semibold text-gray-700 hover:underline">Tentar Novamente</button>
-              </div>
-            }
-            
-            <AnimatePresence>
-              {generatedModelUrl && !isGenerating && !error && (
+  if (!userImageUrl) {
+    return (
+        <div className="min-h-screen w-full flex flex-col">
+            <main className="flex-grow flex items-center justify-center p-4">
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.5 }}
-                  className="flex flex-col sm:flex-row items-center gap-4 mt-8"
+                    key="uploader"
+                    className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16"
+                    variants={screenVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
                 >
-                  <button 
-                    onClick={reset}
-                    className="w-full sm:w-auto px-6 py-3 text-base font-semibold text-gray-700 bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300 transition-colors"
-                  >
-                    Usar Foto Diferente
-                  </button>
-                  <button 
-                    onClick={() => {
-                        if (generatedModelUrl) {
-                            onModelFinalized(generatedModelUrl);
-                        }
-                    }}
-                    className="w-full sm:w-auto relative inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-gray-900 rounded-md cursor-pointer group hover:bg-gray-700 transition-colors"
-                  >
-                    Começar a Criar Looks &rarr;
-                  </button>
+                    <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+                        <div className="max-w-lg">
+                            <h1 className="text-5xl md:text-6xl font-serif font-bold text-foreground leading-tight">
+                                Seja a Modelo da Sua Própria Marca.
+                            </h1>
+                            <p className="mt-4 text-lg text-muted-foreground">
+                                Passe o mouse sobre a imagem para ver o antes e depois. Envie uma foto sua e use as roupas da sua loja para criar looks incríveis.
+                            </p>
+                            <hr className="my-8 border-border" />
+                            <div className="flex flex-col items-center lg:items-start w-full gap-3">
+                                <label htmlFor="image-upload-start" className="w-full relative flex items-center justify-center px-8 py-3 text-base font-semibold text-primary-foreground bg-primary rounded-lg cursor-pointer group hover:bg-primary/90 transition-colors">
+                                    <UploadCloudIcon className="w-5 h-5 mr-3" />
+                                    Criar Minha Modelo
+                                </label>
+                                <input id="image-upload-start" type="file" className="hidden" accept="image/png, image/jpeg, image/webp, image/avif, image/heic, image/heif" onChange={handleFileChange} />
+                                <p className="text-muted-foreground text-sm">Use uma foto nítida e de corpo inteiro para melhores resultados.</p>
+                                {error && <p className="text-destructive text-sm mt-2">{error}</p>}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
+                        <div className="w-full max-w-sm">
+                            <Compare
+                                firstImage="https://storage.googleapis.com/gemini-95-icons/vto-start-woman-before.png"
+                                secondImage="https://storage.googleapis.com/gemini-95-icons/vto-start-woman-after.png"
+                                slideMode="hover"
+                                className="w-full aspect-[2/3] rounded-2xl shadow-lg"
+                            />
+                        </div>
+                    </div>
                 </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          <div className="md:w-1/2 w-full flex items-center justify-center">
-            <div 
-              className={`relative rounded-[1.25rem] transition-all duration-700 ease-in-out ${isGenerating ? 'border border-gray-300 animate-pulse' : 'border border-transparent'}`}
+            </main>
+            <Footer />
+        </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center p-4">
+        <AnimatePresence mode="wait">
+            <motion.div
+            key="compare"
+            className="w-full max-w-6xl mx-auto h-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.4, ease: "easeInOut" }}
             >
-              <Compare
-                firstImage={userImageUrl}
-                secondImage={generatedModelUrl ?? userImageUrl}
-                slideMode="drag"
-                className="w-[280px] h-[420px] sm:w-[320px] sm:h-[480px] lg:w-[400px] lg:h-[600px] rounded-2xl bg-gray-200"
-              />
+            <div className="md:w-1/2 flex-shrink-0 flex flex-col items-center md:items-start">
+                <div className="text-center md:text-left">
+                <h1 className="text-4xl md:text-5xl font-serif font-bold text-foreground leading-tight">
+                    Sua Modelo Digital
+                </h1>
+                <p className="mt-2 text-md text-muted-foreground">
+                    Arraste o controle deslizante para ver a transformação.
+                </p>
+                </div>
+                
+                {isGenerating && (
+                <div className="flex items-center gap-3 text-lg text-foreground font-serif mt-6">
+                    <Spinner />
+                    <span>Gerando sua modelo...</span>
+                </div>
+                )}
+
+                {error && 
+                <div className="text-center md:text-left text-destructive max-w-md mt-6">
+                    <p className="font-semibold">A Geração Falhou</p>
+                    <p className="text-sm mb-4">{error}</p>
+                    <button onClick={reset} className="text-sm font-semibold text-foreground hover:underline">Tentar Novamente</button>
+                </div>
+                }
+                
+                <AnimatePresence>
+                {generatedModelUrl && !isGenerating && !error && (
+                    <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col sm:flex-row items-center gap-4 mt-8"
+                    >
+                    <button 
+                        onClick={reset}
+                        className="w-full sm:w-auto px-6 py-3 text-base font-semibold text-primary bg-secondary rounded-lg cursor-pointer hover:bg-accent transition-colors"
+                    >
+                        Usar Outra Foto
+                    </button>
+                    <button 
+                        onClick={() => onModelFinalized(generatedModelUrl)}
+                        className="w-full sm:w-auto relative inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-primary-foreground bg-primary rounded-lg cursor-pointer group hover:bg-primary/90 transition-colors"
+                    >
+                        Começar a Criar Looks &rarr;
+                    </button>
+                    </motion.div>
+                )}
+                </AnimatePresence>
             </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            <div className="md:w-1/2 w-full flex items-center justify-center">
+                <div 
+                className={`relative w-full max-w-xs sm:max-w-sm lg:max-w-md aspect-[2/3] rounded-2xl bg-muted shadow-lg transition-all duration-700 ease-in-out ${isGenerating ? 'border border-border animate-pulse' : 'border-transparent'}`}
+                >
+                <Compare
+                    firstImage={userImageUrl}
+                    secondImage={generatedModelUrl ?? userImageUrl}
+                    slideMode="drag"
+                    className="w-full h-full rounded-2xl"
+                />
+                </div>
+            </div>
+            </motion.div>
+        </AnimatePresence>
+        <Footer />
+    </div>
   );
 };
 

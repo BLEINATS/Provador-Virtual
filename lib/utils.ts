@@ -55,6 +55,11 @@ export function getFriendlyErrorMessage(error: unknown, context: string): string
         rawMessage = String(error);
     }
 
+    // Check for rate limit error
+    if (rawMessage.includes("429") || rawMessage.includes("RESOURCE_EXHAUSTED") || rawMessage.includes("exceeded your current quota")) {
+        return "Você atingiu o limite de solicitações da API. Por favor, aguarde um momento antes de tentar novamente. Se o problema persistir, verifique seu plano no Google AI Studio.";
+    }
+
     // Check for specific unsupported MIME type error from Gemini API
     if (rawMessage.includes("Unsupported MIME type")) {
         try {
@@ -72,5 +77,5 @@ export function getFriendlyErrorMessage(error: unknown, context: string): string
         return `Formato de arquivo não suportado. Por favor, envie um formato de imagem como PNG, JPEG ou WEBP.`;
     }
     
-    return `${context}. ${rawMessage}`;
+    return `${context}. Detalhes: ${rawMessage}`;
 }

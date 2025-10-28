@@ -3,42 +3,31 @@
  * SPDX-License-Identifier: Apache-2.0
 */
 import React from 'react';
-import { ShirtIcon, MenuIcon, HomeIcon } from './icons';
+import { ShirtIcon, HomeIcon } from './icons';
 
 interface HeaderProps {
-    isDesktop: boolean;
-    onMenuClick: () => void;
     onGoHome: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ isDesktop, onMenuClick, onGoHome }) => {
+const Header: React.FC<HeaderProps> = ({ onGoHome }) => {
   return (
-    <header className="w-full py-4 px-4 md:px-8 bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200/60">
-      <div className="flex items-center justify-between">
+    <header className="w-full py-3 px-4 md:px-6 bg-background/80 backdrop-blur-md sticky top-0 z-20 border-b">
+      <div className="flex items-center justify-between max-w-[1600px] mx-auto">
           <div className="flex items-center gap-3">
-            <ShirtIcon className="w-6 h-6 text-gray-700" />
-            <h1 className="text-2xl font-serif tracking-widest text-gray-800">
+            <div className="w-8 h-8 bg-primary text-primary-foreground flex items-center justify-center rounded-md">
+                <ShirtIcon className="w-5 h-5" />
+            </div>
+            <h1 className="text-xl font-serif tracking-widest text-foreground">
                 Provador Virtual
             </h1>
           </div>
-          <div className="flex items-center gap-2">
-            <button 
-                onClick={onGoHome} 
-                className="p-2 text-gray-700 hover:bg-gray-200 rounded-md"
-                aria-label="Voltar para a tela inicial"
-            >
-                <HomeIcon className="w-6 h-6" />
-            </button>
-            {!isDesktop && (
-              <button 
-                  onClick={onMenuClick} 
-                  className="p-2 text-gray-700 hover:bg-gray-200 rounded-md"
-                  aria-label="Abrir menu"
-              >
-                  <MenuIcon className="w-6 h-6" />
-              </button>
-            )}
-          </div>
+          <button 
+              onClick={onGoHome} 
+              className="p-2 text-muted-foreground hover:bg-accent hover:text-foreground rounded-md transition-colors"
+              aria-label="Voltar para a tela inicial"
+          >
+              <HomeIcon className="w-6 h-6" />
+          </button>
       </div>
     </header>
   );

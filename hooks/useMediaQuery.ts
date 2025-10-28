@@ -20,6 +20,9 @@ export const useMediaQuery = (query: string): boolean => {
     
     const mediaQueryList = window.matchMedia(query);
     const listener = (event: MediaQueryListEvent) => setMatches(event.matches);
+    
+    // Sincroniza o estado para garantir que está correto
+    setMatches(mediaQueryList.matches);
 
     // Adiciona o listener
     try {
@@ -27,11 +30,6 @@ export const useMediaQuery = (query: string): boolean => {
     } catch (e) {
       // Fallback para navegadores mais antigos
       mediaQueryList.addListener(listener);
-    }
-    
-    // Sincroniza o estado inicial
-    if (mediaQueryList.matches !== matches) {
-      setMatches(mediaQueryList.matches);
     }
 
     // Limpa o listener ao desmontar
@@ -43,7 +41,7 @@ export const useMediaQuery = (query: string): boolean => {
         mediaQueryList.removeListener(listener);
       }
     };
-  }, [query, matches]);
+  }, [query]); // A dependência agora é apenas a 'query', que é o correto
 
   return matches;
 };

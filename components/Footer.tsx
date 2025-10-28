@@ -28,17 +28,20 @@ const Footer: React.FC<FooterProps> = ({ isOnDressingScreen = false }) => {
 
     return () => clearInterval(interval);
   }, []);
+  
+  // Oculta completamente o footer na tela principal para maximizar o espaço
+  if(isOnDressingScreen) return null;
 
   return (
-    <footer className={`fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-200/60 p-3 z-50 ${isOnDressingScreen ? 'hidden sm:block' : ''}`}>
-      <div className="mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-gray-600 max-w-7xl px-4">
+    <footer className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-md border-t p-3 z-50">
+      <div className="mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground max-w-7xl px-4">
         <p>
           Criado por{' '}
           <a 
             href="https://x.com/bleinat" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="font-semibold text-gray-800 hover:underline"
+            className="font-semibold text-foreground hover:underline"
           >
             @bleinat
           </a>

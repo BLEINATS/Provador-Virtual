@@ -56,11 +56,11 @@ const RefineModal: React.FC<RefineModalProps> = ({ isOpen, onClose, onRefine, is
                 exit={{ scale: 0.95, y: 20, opacity: 0 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative bg-white rounded-2xl w-full max-w-lg flex flex-col shadow-xl"
+                className="relative bg-card rounded-2xl w-full max-w-lg flex flex-col shadow-xl border"
             >
                 <div className="flex items-center justify-between p-4 border-b">
-                <h2 className="text-2xl font-serif tracking-wider text-gray-800">Editar Foto</h2>
-                <button onClick={onClose} disabled={isLoading} className="p-1 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-800 disabled:opacity-50">
+                <h2 className="text-2xl font-serif tracking-wider text-foreground">Editar Foto</h2>
+                <button onClick={onClose} disabled={isLoading} className="p-1 rounded-full text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-50">
                     <XIcon className="w-6 h-6" />
                 </button>
                 </div>
@@ -68,12 +68,12 @@ const RefineModal: React.FC<RefineModalProps> = ({ isOpen, onClose, onRefine, is
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center h-48">
                             <Spinner />
-                            <p className="mt-4 text-gray-600 font-serif">Editando sua imagem...</p>
+                            <p className="mt-4 text-muted-foreground font-serif">Editando sua imagem...</p>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label htmlFor="refine-prompt" className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="refine-prompt" className="block text-sm font-medium text-foreground mb-1">
                                 Descreva a mudança que você quer fazer:
                                 </label>
                                 <textarea
@@ -82,7 +82,7 @@ const RefineModal: React.FC<RefineModalProps> = ({ isOpen, onClose, onRefine, is
                                     onChange={(e) => setPrompt(e.target.value)}
                                     placeholder="Ex: Remova a pulseira, adicione um bolso na camisa..."
                                     rows={3}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-800 focus:border-gray-800 transition-shadow"
+                                    className="w-full px-3 py-2 border rounded-md bg-background focus:ring-2 focus:ring-ring focus:border-ring transition-shadow"
                                 />
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -91,13 +91,13 @@ const RefineModal: React.FC<RefineModalProps> = ({ isOpen, onClose, onRefine, is
                                         key={suggestion}
                                         type="button"
                                         onClick={() => setPrompt(suggestion)}
-                                        className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
+                                        className="px-3 py-1 text-xs bg-secondary text-secondary-foreground rounded-full hover:bg-accent transition-colors"
                                     >
                                         {suggestion}
                                     </button>
                                 ))}
                             </div>
-                            <button type="submit" disabled={!prompt.trim() || isLoading} className="w-full py-3 bg-gray-900 text-white font-semibold rounded-md hover:bg-gray-700 disabled:bg-gray-300 transition-colors">
+                            <button type="submit" disabled={!prompt.trim() || isLoading} className="w-full py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground transition-colors">
                             Aplicar Edição
                             </button>
                         </form>
