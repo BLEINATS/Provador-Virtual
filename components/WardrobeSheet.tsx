@@ -9,7 +9,7 @@ import { UploadCloudIcon, CheckCircleIcon, XIcon } from './icons';
 import { AnimatePresence, motion } from 'framer-motion';
 
 
-interface WardrobeModalProps {
+interface WardrobeSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onGarmentSelect: (garmentFile: File, garmentInfo: WardrobeItem) => void;
@@ -25,7 +25,7 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
     return new File([blob], filename, { type: mimeType });
 };
 
-const WardrobeModal: React.FC<WardrobeModalProps> = ({ isOpen, onClose, onGarmentSelect, activeGarmentIds, isLoading }) => {
+const WardrobeSheet: React.FC<WardrobeSheetProps> = ({ isOpen, onClose, onGarmentSelect, activeGarmentIds, isLoading }) => {
     const [error, setError] = useState<string | null>(null);
 
     const handleGarmentClick = async (item: WardrobeItem) => {
@@ -117,4 +117,4 @@ const WardrobeModal: React.FC<WardrobeModalProps> = ({ isOpen, onClose, onGarmen
   );
 };
 
-export default WardrobeModal;
+export default WardrobeSheet;

@@ -2,18 +2,19 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Provador Virtual com IA
+# Run and deploy your AI Studio app
 
-Este repositório contém o código para um aplicativo de provador virtual que utiliza IA generativa para vestir modelos.
+This contains everything you need to run your app locally.
 
-Veja o app no AI Studio: https://ai.studio/apps/drive/1uJm5EGlnMDGcrw8r9GLQje4yzj4IgSFH
+View your app in AI Studio: https://ai.studio/apps/drive/1uJm5EGlnMDGcrw8r9GLQje4yzj4IgSFH
 
-## Executar Localmente
+## Run Locally
 
-**Pré-requisitos:** Node.js e Yarn
+**Prerequisites:**  Node.js
 
-1. Instale as dependências:
-   `yarn install`
-2. Defina a `GEMINI_API_KEY` no arquivo `.env` para a sua chave da API Gemini.
-3. Execute o aplicativo:
-   `yarn run dev`
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

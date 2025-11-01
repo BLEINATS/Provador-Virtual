@@ -19,3 +19,10 @@ export interface SavedOutfit {
   imageUrl: string;
   layers: OutfitLayer[];
 }
+
+export interface DigitalModel {
+  id: string;
+  name: string;
+  originalImageUrl: string;
+  generatedModelUrl: string;
+}

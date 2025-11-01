@@ -6,13 +6,19 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { XIcon } from './icons';
+import { translations } from '../lib/translations';
+
+type Language = 'pt-br' | 'en';
 
 interface ZoomModalProps {
   imageUrl: string;
   onClose: () => void;
+  language: Language;
 }
 
-const ZoomModal: React.FC<ZoomModalProps> = ({ imageUrl, onClose }) => {
+const ZoomModal: React.FC<ZoomModalProps> = ({ imageUrl, onClose, language }) => {
+  const t = translations[language];
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -43,13 +49,13 @@ const ZoomModal: React.FC<ZoomModalProps> = ({ imageUrl, onClose }) => {
       >
         <img 
           src={imageUrl} 
-          alt="Visualização ampliada do look" 
+          alt={t.zoomedViewAlt} 
           className="max-w-full max-h-full object-contain"
         />
         <button 
           onClick={onClose}
           className="absolute top-2 right-2 p-2 bg-white/20 rounded-full text-white hover:bg-white/40 transition-colors"
-          aria-label="Fechar visualização ampliada"
+          aria-label={t.closeZoomView}
         >
           <XIcon className="w-6 h-6" />
         </button>

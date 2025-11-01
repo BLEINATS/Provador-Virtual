@@ -7,13 +7,13 @@ import React from 'react';
 import { OutfitLayer } from '../types';
 import { Trash2Icon, PlusIcon } from './icons';
 
-interface OutfitStackProps {
+interface CurrentOutfitPanelProps {
   outfitHistory: OutfitLayer[];
   onRemoveLastGarment: () => void;
   onAddGarment: () => void;
 }
 
-const OutfitStack: React.FC<OutfitStackProps> = ({ outfitHistory, onRemoveLastGarment, onAddGarment }) => {
+const CurrentOutfitPanel: React.FC<CurrentOutfitPanelProps> = ({ outfitHistory, onRemoveLastGarment, onAddGarment }) => {
   return (
     <div className="h-full flex flex-col">
       <h2 className="text-xl font-serif tracking-wider text-gray-800 border-b border-gray-400/50 pb-2 mb-3">Itens Vestidos</h2>
@@ -64,4 +64,4 @@ const OutfitStack: React.FC<OutfitStackProps> = ({ outfitHistory, onRemoveLastGa
   );
 };
 
-export default OutfitStack;
+export default CurrentOutfitPanel;

@@ -4,6 +4,7 @@
 */
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { translations } from "./translations";
  
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,9 +45,26 @@ export const urlToFile = (url: string, filename: string): Promise<File> => {
     });
 };
 
+export const blobToBase64 = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = (reader.result as string).split(',')[1];
+            resolve(base64String);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+};
 
-export function getFriendlyErrorMessage(error: unknown, context: string): string {
-    let rawMessage = 'Ocorreu um erro desconhecido.';
+
+export function getFriendlyErrorMessage(
+    error: unknown, 
+    context: string,
+    language: 'pt-br' | 'en'
+): string {
+    const t = translations[language];
+    let rawMessage = 'An unknown error occurred.';
     if (error instanceof Error) {
         rawMessage = error.message;
     } else if (typeof error === 'string') {
@@ -55,27 +73,19 @@ export function getFriendlyErrorMessage(error: unknown, context: string): string
         rawMessage = String(error);
     }
 
-    // Check for rate limit error
-    if (rawMessage.includes("429") || rawMessage.includes("RESOURCE_EXHAUSTED") || rawMessage.includes("exceeded your current quota")) {
-        return "Você atingiu o limite de solicitações da API. Por favor, aguarde um momento antes de tentar novamente. Se o problema persistir, verifique seu plano no Google AI Studio.";
-    }
-
-    // Check for specific unsupported MIME type error from Gemini API
     if (rawMessage.includes("Unsupported MIME type")) {
         try {
-            // It might be a JSON string like '{"error":{"message":"..."}}'
             const errorJson = JSON.parse(rawMessage);
             const nestedMessage = errorJson?.error?.message;
             if (nestedMessage && nestedMessage.includes("Unsupported MIME type")) {
                 const mimeType = nestedMessage.split(': ')[1] || 'unsupported';
-                return `O tipo de arquivo '${mimeType}' não é suportado. Por favor, use um formato como PNG, JPEG ou WEBP.`;
+                return t.errorFileNotSupported.replace('{mimeType}', mimeType);
             }
         } catch (e) {
             // Not a JSON string, but contains the text. Fallthrough to generic message.
         }
-        // Generic fallback for any "Unsupported MIME type" error
-        return `Formato de arquivo não suportado. Por favor, envie um formato de imagem como PNG, JPEG ou WEBP.`;
+        return t.errorFileGeneric;
     }
     
-    return `${context}. Detalhes: ${rawMessage}`;
+    return `${context}. ${rawMessage}`;
 }

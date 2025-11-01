@@ -1,7 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
 "use client";
 // FIX: Import React hooks to resolve 'Cannot find name' errors.
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -14,7 +10,7 @@ interface CompareProps {
   secondImage?: string;
   className?: string;
   firstImageClassName?: string;
-  secondImageClassname?: string;
+  secondImageClassName?: string;
   initialSliderPercentage?: number;
   slideMode?: "hover" | "drag";
   showHandlebar?: boolean;
@@ -26,7 +22,7 @@ export const Compare = ({
   secondImage = "",
   className,
   firstImageClassName,
-  secondImageClassname,
+  secondImageClassName,
   initialSliderPercentage = 50,
   slideMode = "drag",
   showHandlebar = true,
@@ -217,9 +213,14 @@ export const Compare = ({
       <AnimatePresence initial={false}>
         {secondImage ? (
           <motion.img
+            key={secondImage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
             className={cn(
               "absolute top-0 left-0 z-[19]  rounded-2xl w-full h-full select-none object-cover",
-              secondImageClassname
+              secondImageClassName
             )}
             alt="second image"
             src={secondImage}

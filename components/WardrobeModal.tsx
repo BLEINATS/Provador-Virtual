@@ -4,9 +4,12 @@
 */
 import React, { useState } from 'react';
 import type { WardrobeItem } from '../types';
-import { UploadCloudIcon, CheckCircleIcon } from './icons';
+import { UploadCloudIcon, CheckCircleIcon, LinkIcon, GlobeIcon } from './icons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { urlToFile } from '../lib/utils';
+import { translations } from '../lib/translations';
+
+type Language = 'pt-br' | 'en';
 
 interface WardrobePanelProps {
   onApplySelection: (garmentFiles: File[], garmentInfos: WardrobeItem[]) => void;
@@ -14,11 +17,15 @@ interface WardrobePanelProps {
   isLoading: boolean;
   wardrobe: WardrobeItem[];
   onUpload: (garmentFile: File, garmentInfo: WardrobeItem) => void;
+  onOpenEcommerceModal: () => void;
+  onOpenUrlImportModal: () => void;
+  language: Language;
 }
 
-const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGarmentIds, isLoading, wardrobe, onUpload }) => {
+const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGarmentIds, isLoading, wardrobe, onUpload, onOpenEcommerceModal, onOpenUrlImportModal, language }) => {
     const [error, setError] = useState<string | null>(null);
     const [selectedItems, setSelectedItems] = useState<WardrobeItem[]>([]);
+    const t = translations[language];
 
     const handleItemToggle = (item: WardrobeItem) => {
         if (wornGarmentIds.includes(item.id)) return;
@@ -45,7 +52,7 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGar
             onApplySelection(files, infos);
             setSelectedItems([]);
         } catch (err) {
-            const detailedError = `Falha ao carregar o item do guarda-roupa.`;
+            const detailedError = t.errorWardrobeItem;
             setError(detailedError);
             console.error(`[Error] Failed to load and convert wardrobe item.`, err);
         }
@@ -55,7 +62,7 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGar
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             if (!file.type.startsWith('image/')) {
-                setError('Por favor, selecione um arquivo de imagem.');
+                setError(t.errorFileGeneric);
                 return;
             }
             const customGarmentInfo: WardrobeItem = {
@@ -70,12 +77,19 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGar
   return (
     <div className="pt-6 border-t border-gray-400/50 flex flex-col flex-grow">
         <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-serif tracking-wider text-gray-800">Produtos</h2>
-            <label htmlFor="custom-garment-upload" className={`flex items-center gap-2 px-3 py-1.5 text-sm font-semibold border-2 border-dashed rounded-md text-gray-500 transition-colors ${isLoading ? 'cursor-not-allowed bg-gray-100' : 'hover:border-gray-600 hover:text-gray-700 cursor-pointer'}`}>
-                <UploadCloudIcon className="w-4 h-4"/>
-                <span>Adicionar Novo</span>
-                <input id="custom-garment-upload" type="file" className="hidden" accept="image/png, image/jpeg, image/webp, image/avif, image/heic, image/heif" onChange={handleFileChange} disabled={isLoading}/>
-            </label>
+            <h2 className="text-xl font-serif tracking-wider text-gray-800">{t.products}</h2>
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+                <button onClick={onOpenEcommerceModal} title={t.importFromEcommerce} className={`flex items-center gap-2 px-3 py-1.5 text-sm font-semibold border-2 border-dashed rounded-md text-gray-500 transition-colors ${isLoading ? 'cursor-not-allowed bg-gray-100' : 'hover:border-gray-600 hover:text-gray-700 cursor-pointer'}`}>
+                    <LinkIcon className="w-4 h-4" />
+                </button>
+                 <button onClick={onOpenUrlImportModal} title={t.importFromUrl} className={`flex items-center gap-2 px-3 py-1.5 text-sm font-semibold border-2 border-dashed rounded-md text-gray-500 transition-colors ${isLoading ? 'cursor-not-allowed bg-gray-100' : 'hover:border-gray-600 hover:text-gray-700 cursor-pointer'}`}>
+                    <GlobeIcon className="w-4 h-4" />
+                </button>
+                <label htmlFor="custom-garment-upload" title={t.addNewProduct} className={`flex items-center gap-2 px-3 py-1.5 text-sm font-semibold border-2 border-dashed rounded-md text-gray-500 transition-colors ${isLoading ? 'cursor-not-allowed bg-gray-100' : 'hover:border-gray-600 hover:text-gray-700 cursor-pointer'}`}>
+                    <UploadCloudIcon className="w-4 h-4"/>
+                    <input id="custom-garment-upload" type="file" className="hidden" accept="image/png, image/jpeg, image/webp, image/avif, image/heic, image/heif" onChange={handleFileChange} disabled={isLoading}/>
+                </label>
+            </div>
         </div>
         <div className="grid grid-cols-3 gap-3 flex-grow">
             {wardrobe.map((item) => {
@@ -87,7 +101,7 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGar
                 onClick={() => handleItemToggle(item)}
                 disabled={isLoading || isWorn}
                 className={`relative aspect-square border rounded-lg overflow-hidden transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 group disabled:opacity-60 disabled:cursor-not-allowed ${isSelected ? 'border-blue-500 border-2' : 'border-gray-200'}`}
-                aria-label={`Selecionar ${item.name}`}
+                aria-label={`${t.selectItem} ${item.name}`}
                 >
                 <img src={item.url} alt={item.name} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -117,14 +131,14 @@ const WardrobePanel: React.FC<WardrobePanelProps> = ({ onApplySelection, wornGar
                         disabled={isLoading}
                         className="w-full text-center bg-gray-900 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 ease-in-out hover:bg-gray-700 active:scale-95 text-base disabled:bg-gray-400 disabled:cursor-wait"
                     >
-                        Vestir Itens ({selectedItems.length})
+                        {t.wearItems} ({selectedItems.length})
                     </button>
                 </motion.div>
             )}
         </AnimatePresence>
         
         {wardrobe.length === 0 && (
-             <p className="text-center text-sm text-gray-500 mt-4">Os produtos da sua loja aparecerão aqui.</p>
+             <p className="text-center text-sm text-gray-500 mt-4">{t.wardrobeEmpty}</p>
         )}
         {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
     </div>
